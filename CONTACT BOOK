@@ -1,0 +1,101 @@
+from tkinter import *
+from tkinter import messagebox
+
+tip=Tk()
+tip.title("contact book")
+tip.config(bg="silver")
+tip.geometry("700x400")
+
+name=StringVar()
+num=StringVar()
+email=StringVar()
+address=StringVar()
+
+contlist=[
+    ['susank','123******','susanku2@gmail.com','guntur'],
+    ['ashok','944*******','ash2@gmail.com','vijayawada']
+]
+
+frame=Frame(tip)
+frame.place(x=550,y=25)
+
+select=Listbox(frame,height=20,width=20,relief="raised")
+select.pack(side=LEFT)
+
+def selected():
+    if len(select.curselection())==0:
+        messagebox.showerror("confirmation","Error please select name")
+    else:
+        return int(select.curselection()[0])
+    
+def view():
+    Name,phone,Email,Address =contlist[selected()]
+    name.set(Name)
+    num.set(phone)
+    email.set(Email)
+    address.set(Address)
+
+
+def exit():
+    tip.destroy()
+
+def add():
+    if name.get()!="" and num.get()!="" and email.get()!="" and address.get()!="":
+        contlist.append([name.get(),num.get(),email.get(),address.get()])
+        print(contlist)
+        select_set()
+        messagebox.showinfo("confirmation","succesfully added a new contact")
+
+def update():
+    if name.get() and num.get() and email.get() and address.get():
+        contlist[selected()]=[name.get(),num.get(),email.get(),address.get()]
+
+        messagebox.showinfo('confirmation',"successfully update contact")
+        select_set()
+
+
+def delete():
+    if len(select.curselection())!=0:
+        del contlist[selected()]
+        select_set()
+
+    else:
+        messagebox.showerror("Error","please select the contact")
+
+def select_set():
+    contlist.sort()
+    select.delete(0,END)
+    for Name,phone,Email,Address in contlist:
+        select.insert(END,name)
+select_set()
+
+def reset():
+    name.set("")
+    num.set("")
+    email.set("")
+    address.set("")
+
+#labels,entries
+Label(tip,text="Name :",bg="black",fg="white").place(x=30,y=20)
+Entry(tip,textvariable=name,width=20,bd=4).place(x=100,y=20)
+
+Label(tip,text="contact number :",bg="black",fg="white").place(x=30,y=50)
+Entry(tip,textvariable=num,width=20,bd=4).place(x=150,y=50)
+
+
+Label(tip,text="Address :",bg="black",fg="white").place(x=300,y=20)
+Entry(tip,textvariable=address,width=25,bd=4).place(x=380,y=20)
+
+
+Label(tip,text="Email :",bg="black",fg="white").place(x=30,y=80)
+Entry(tip,textvariable=email,width=28,bd=4).place(x=100,y=80)
+
+#buttons
+Button(tip,text="add",command=add,bg="light blue").place(x=50,y=140)
+Button(tip,text="update",command=update,bg="light blue").place(x=150,y=140)
+Button(tip,text="view",command=view,bg="light blue").place(x=150,y=230)
+Button(tip,text='delete',command=delete,bg="light blue").place(x=50,y=230)
+Button(tip,text="exit",command=exit,bg="red").place(x=100,y=300)
+Button(tip,text="Reset",command=reset,bg="lightblue").place(x=250,y=230)
+
+tip.mainloop()
